@@ -1,49 +1,38 @@
-const SLICE_COUNT = 10;
+const SLICE_COUNT = 18;
 
-function setup_pScope(pScope){
-  pScope.output_mode(ANIMATED_DISK);
+let pieRadius = 1000;
+let circleCount = 10;
+
+let animate = true;
+
+function setup_pScope(pScope) {
+  pScope.output_mode(animate ? ANIMATED_DISK : STATIC_DISK);
   pScope.scale_for_screen(true);
   pScope.draw_layer_boundaries(true);
-  pScope.set_direction(CCW);
+  pScope.set_direction(CW);
   pScope.set_slice_count(SLICE_COUNT);
 }
 
-function setup_layers(pScope){
+function setup_layers(pScope) {
+  colorMode(HSL, circleCount);
+  noStroke();
 
-  new PLayer(null, 220);  //lets us draw the whole circle background, ignoring the boundaries
+  new PLayer(null, 0); //lets us draw the whole circle background, ignoring the boundaries
 
-  var layer1 = new PLayer(faces);
-  layer1.mode( SWIRL(5) );
-  layer1.set_boundary( 200, 1000 );
-
-  var layer2 = new PLayer(squares);
-  layer2.mode( RING );
-  layer2.set_boundary( 0, 400 );
+  var layer1 = new PLayer(circles);
+  layer1.mode(RING);
 }
 
-function faces(x, y, animation, pScope){
-  
-  scale(animation.frame*2);
+function circles(x, y, animation, pScope) {
+  for (let i = 1; i < (circleCount + 1); i++) {
 
-  ellipse(0,0,50,50); // draw head
-  fill(30);
-  ellipse(-10,-10,10,10); //draw eye
-  ellipse(10,-10,10,10); // draw eye
-  arc(0,10,20,10,0,180); // draw mouth
+    let x = (animation.frame * SLICE_COUNT * 5);
+    let y = i * (pieRadius / (circleCount));
 
-}
+    let w = 50 * (circleCount - i) * 0.01 * (SLICE_COUNT - (animation.frame * SLICE_COUNT));
 
-function squares(x, y, animation, pScope){
-
-  // this is how you set up a background for a specific layer
-  let angleOffset = (360 / SLICE_COUNT) / 2
-  let backgroundArcStart = 270 - angleOffset;
-  let backgroundArcEnd = 270 + angleOffset;
-
-  fill(66, 135, 245)
-  arc(x,y,800,800,backgroundArcStart,backgroundArcEnd); // draws "pizza slice" in the background
-
-  fill(255)
-  rect(-10,-300-animation.wave()*50,20,20) // .wave is a cosine wave btw
-
+    let h = ((animation.frame * SLICE_COUNT) + (i / 4)) % (circleCount);
+    fill(h, circleCount, (circleCount / 2));
+    ellipse(x, y, w, w);
+  }
 }
