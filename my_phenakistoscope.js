@@ -1,38 +1,49 @@
 const SLICE_COUNT = 18;
 
-let pieRadius = 1000;
-let circleCount = 10;
-
 let animate = true;
+
+let animatedSlide = 0;
+let currentSlide = 0;
+
 
 function setup_pScope(pScope) {
   pScope.output_mode(animate ? ANIMATED_DISK : STATIC_DISK);
   pScope.scale_for_screen(true);
   pScope.draw_layer_boundaries(true);
-  pScope.set_direction(CCW);
+  pScope.set_direction(CW);
   pScope.set_slice_count(SLICE_COUNT);
 }
 
 function setup_layers(pScope) {
-  colorMode(HSL, circleCount);
-  noStroke();
+  strokeWeight(0);
 
-  new PLayer(null, 0);
-
-  var layer1 = new PLayer(circles);
-  layer1.mode(RING);
+  var layer1 = new PLayer(radarBG);
+  var layer2 = new PLayer(radarLine);
+  var layer2 = new PLayer(debug);
 }
 
-function circles(x, y, animation, pScope) {
-  for (let i = 1; i < (circleCount + 1); i++) {
+function radarLine(x, y, animation, pScope) {
+  angleMode(DEGREES); 
+  strokeWeight(4);
 
-    let x = (animation.frame * SLICE_COUNT * 5) + 300;
-    let y = i * (pieRadius / circleCount);
-
-    let w = (animation.wave() * SLICE_COUNT * i) + 10;
-
-    let h = ((animation.frame * SLICE_COUNT) + (i / 4)) % circleCount;
-    fill(h, circleCount, (circleCount / 2));
-    ellipse(x, y, w, w);
+  if (animation.frame == 0) {
+    for (let i = 0; i < 50; i++) {
+      rotate(90/50);
+      stroke(0, 255, 100, ((100 / 50) * i));
+      line((0), 0, 0, 1000);
+    }
   }
+
+  rotate(90/50);
+}
+
+function radarBG(x, y, animation, pScope) {
+  fill(0, 100, 50)
+  circle(0, 0, 2100)
+}
+
+function debug(x, y, animation, pScope) {
+  fill(255);
+  textSize(50);
+  text((animation.frame * SLICE_COUNT), 0, 900);
 }
