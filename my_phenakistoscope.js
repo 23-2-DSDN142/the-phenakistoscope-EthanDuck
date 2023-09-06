@@ -1,13 +1,13 @@
 const SLICE_COUNT = 18;
 
-let animate = true;
+let output = true;
 
 let radarSlice = 0;
 
 let rOffset = 0;
 
 function setup_pScope(pScope) {
-  pScope.output_mode(animate ? ANIMATED_DISK : STATIC_DISK);
+  pScope.output_mode(output ? ANIMATED_DISK : OUTPUT_GIF(1000));
   pScope.scale_for_screen(true);
   pScope.draw_layer_boundaries(true);
   pScope.set_direction(CCW);
@@ -18,10 +18,9 @@ function setup_layers(pScope) {
   strokeWeight(0);
 
   var layer = new PLayer(radarBG);
-  var layer = new PLayer(techys);
+  var layer = new PLayer(texts);
   var layer = new PLayer(planeLayer);
   var layer = new PLayer(radarLine);
-  // var layer = new PLayer(planeIcon);
 }
 
 function planeLayer(x, y, animation, pScope) {
@@ -34,7 +33,6 @@ function planeLayer(x, y, animation, pScope) {
   if (animation.frame == 0) {
     rOffset += 1;
     rOffset = rOffset % SLICE_COUNT;
-    print(rOffset)  
   }
 }
 
@@ -49,7 +47,7 @@ function planeDraw(x, y, slice, plane, animation) {
   if (animation.frame == 0) {
     fill(255, 255, 255, (255 - ((rOffset + slice - 1) % SLICE_COUNT * (255 / (SLICE_COUNT - 2)))));
 
-    if (plane){
+    if (plane) {
       planeIcon(x, y, animation)
     } else {
       circle(x, y, 60);
@@ -61,7 +59,6 @@ function planeDraw(x, y, slice, plane, animation) {
 
 function planeIcon(x, y, animation) {
   if (animation.frame == 0) {
-
     beginShape();
 
     vertex((x - 10), (y));
@@ -117,10 +114,10 @@ function radarBG(x, y, animation, pScope) {
     circle(0, 0, (2000 - (100 * i)));
   }
 
-  //Thin lined Circles
+  //Circles Lines
 
   strokeWeight(2);
-  stroke(255, 255, 255, 200);
+  stroke(255, 100);
 
   cNum = 6;
 
@@ -128,25 +125,39 @@ function radarBG(x, y, animation, pScope) {
     circle(0, 0, (2000 - ((2000 / cNum) * i)));
   }
 
-  //Lines
+  //Liner Lines
 
   let cDistance = (1000 - ((1000 / cNum)));
 
-  stroke(255, 255, 255, 100);
-  line(0, cDistance, 0, -cDistance)
-  line(-cDistance, 0, cDistance, 0)
+  for (let i = 0; i < 9; i++) {
+    line(0, cDistance, 0, -cDistance);
+    line(-cDistance, 0, cDistance, 0);
+    rotate(20)
+  }
 
-  line(1000, 1000, -1000, -1000)
-  line(1000, -1000, -1000, 1000)
 }
 
-function techys(x, y, animation, pScope) {
+function texts(x, y, animation, pScope) {
   //Cancels the Phenakistoscope Rotation
-  rotate((360 / SLICE_COUNT) * (rOffset + 1) + 0.75);
+  rotate((360 / SLICE_COUNT) * (rOffset + 10) + 170);
 
-  let degree = (360 / SLICE_COUNT) * (animation.frame * SLICE_COUNT);
+  if (animation.frame == 0) {
+    for (let i = 0; i < 36; i++) {
+      let degree = (360 / 36) * i;
 
-  fill(255);
-  textSize(50);
-  text(degree, 0, 950);
+      let cDistance = (1000 - ((1000 / 6)) + 30);
+      
+      rotate((360 / 36))
+      
+      strokeWeight(7);
+      stroke(255, 200);
+      line(0, cDistance, 0 , 880)
+      
+      strokeWeight(0);
+      fill(200, 255, 200, 200);
+      textSize(40);
+      textAlign(CENTER);
+      text(degree, 0, 935);
+    }
+  }
 }
