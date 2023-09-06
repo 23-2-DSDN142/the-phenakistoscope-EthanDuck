@@ -47,7 +47,7 @@ function planeSetup(x, y, slice, plane, animation) {
 
 function planeDraw(x, y, slice, plane, animation) {
   if (animation.frame == 0) {
-    fill(255, 255, 255, (255 - ((rOffset + slice - 1) % SLICE_COUNT * (255 / SLICE_COUNT))));
+    fill(255, 255, 255, (255 - ((rOffset + slice - 1) % SLICE_COUNT * (255 / (SLICE_COUNT - 2)))));
 
     if (plane){
       planeIcon(x, y, animation)
