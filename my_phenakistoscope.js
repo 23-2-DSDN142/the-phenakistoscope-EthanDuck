@@ -2,11 +2,9 @@ const SLICE_COUNT = 18;
 
 let outputMode = true;
 
-// rOffset determines the backwards rotation of the phenakistoscope
-var rOffset = 0;
+var rOffset = 0; // rOffset determines the backwards rotation of the phenakistoscope
 
-// yOffset determines the movement of the planes
-var yOffset = 0;
+var yOffset = 0; // yOffset determines the movement of the planes
 
 function setup_pScope(pScope) {
   pScope.output_mode(outputMode ? ANIMATED_DISK : OUTPUT_GIF(1000));
@@ -26,14 +24,14 @@ function setup_layers(pScope) {
 }
 
 function planeLayer(x, y, animation, pScope) {
-  planeSetup(0, 300, 13, false, animation)
-  planeSetup(0, 450, 1, true, animation)
-  planeSetup(0, 500, 6, false, animation)
-  planeSetup(0, 600, 15, true, animation)
-  planeSetup(0, 600, 4, true, animation)
-  planeSetup(0, 700, 9, true, animation)
+  planeSetup(0, 300, 13, false, animation);
+  planeSetup(0, 450, 1, true, animation);
+  planeSetup(0, 500, 6, false, animation);
+  planeSetup(0, 600, 15, true, animation);
+  planeSetup(0, 600, 4, true, animation);
+  planeSetup(0, 700, 9, true, animation);
 
-  if (animation.frame == 0) {                                  // Ensures that the plane is only drawn on once 
+  if (animation.frame == 0) { // Ensures that the plane is only drawn on once 
     rOffset += 1;
     rOffset = rOffset % SLICE_COUNT;
 
@@ -42,22 +40,22 @@ function planeLayer(x, y, animation, pScope) {
 }
 
 function planeSetup(x, y, slice, plane, animation) {
-  let r = (360 / SLICE_COUNT) * (rOffset + slice);             // Cancels the phenakistoscope Rotation
-  y = y + ((yOffset - (slice * 5) - 1) % (SLICE_COUNT * 5));   // Move the planes forward
+  let r = (360 / SLICE_COUNT) * (rOffset + slice); // Cancels the phenakistoscope Rotation
+  y = y + ((yOffset - (slice * 5) - 1) % (SLICE_COUNT * 5)); // Move the planes forward
 
   rotate(r);
-  planeDraw(x, y, slice, plane, animation)
+  planeDraw(x, y, slice, plane, animation);
   rotate(-r);
 }
 
 function planeDraw(x, y, slice, plane, animation) {
   if (animation.frame == 0) {
-                                                                // Fades the planes in and out
+    // Fades the planes in and out
     fill(255, 255, 255, (255 - ((rOffset + slice - 1) % SLICE_COUNT * (255 / (SLICE_COUNT - 2)))));
 
-    if (plane) {                                               // Plane
-      planeIcon(x, y, animation)
-    } else {                                                   // Bomb
+    if (plane) { // Plane
+      planeIcon(x, y, animation);
+    } else { // Missiles
       circle(x, y, 60);
       circle(x, y, 40);
       circle(x, y, 20);
@@ -103,11 +101,11 @@ function radarLine(x, y, animation) {
   angleMode(DEGREES);
   strokeWeight(4);
 
-  let l = 360                                                  // Number of lines
+  let l = 360; // Number of lines
 
   if (animation.frame == 0) {
 
-    for (let i = 0; i < l; i++) {                              // Draws all of the lines to create the gradient effect
+    for (let i = 0; i < l; i++) { // Draws all of the lines to create the gradient effect
       stroke(0, 255, 100, (200 - i * (200 / l)));
       rotate(140 / l);
       line(0, 0, 0, 1100);
@@ -117,7 +115,7 @@ function radarLine(x, y, animation) {
 
 
 function texts(x, y, animation) {
-  rotate((360 / SLICE_COUNT) * (rOffset + 10) - 10);           // Cancels the phenakistoscope Rotation
+  rotate((360 / SLICE_COUNT) * (rOffset + 10) - 10); // Cancels the phenakistoscope Rotation
 
   if (animation.frame == 0) {
     for (let i = 0; i < 36; i++) {
@@ -125,13 +123,13 @@ function texts(x, y, animation) {
 
       let cDistance = (1000 - ((1000 / 6)) + 30);
 
-      rotate((360 / 36))
+      rotate((360 / 36));
 
-      strokeWeight(7);                                         // Small ticker lines going around the outside
+      strokeWeight(7); // Small ticker lines going around the outside
       stroke(255, 200);
-      line(0, cDistance, 0, 880)
+      line(0, cDistance, 0, 880);
 
-      strokeWeight(0);                                         // Text that goes around the outside
+      strokeWeight(0); // Text that goes around the outside
       fill(200, 255, 200, 200);
       textSize(40);
       textAlign(CENTER);
@@ -141,36 +139,36 @@ function texts(x, y, animation) {
 }
 
 function radarBG(x, y) {
-  rotate((360 / SLICE_COUNT) * (rOffset + 10) - 10);           // Cancels the phenakistoscope Rotation
+  rotate((360 / SLICE_COUNT) * (rOffset + 2)); // Cancels the phenakistoscope Rotation
 
-  fill(0);                                                     // Dark Green Background Circle
+  fill(0); // Dark Green Background Circle
   circle(0, 0, 2000);
 
-  let cNum = 50;                                               // Number of circles to make the background gradient
+  let cNum = 50; // Number of circles to make the background gradient
 
-  for (let i = 0; i < cNum; i++) {                             // Draws the background circles
+  for (let i = 0; i < cNum; i++) { // Draws the background circles
     fill(0, 150, 10, (255 / cNum));
-    circle(0, 0, (2000 - (100 *  i)));
+    circle(0, 0, (2000 - (100 * i)));
   }
 
-  push()                                                       // Draws Europe without effecting any of the previous code
-  europe()
-  pop()
+  push(); // Draws Europe without effecting any of the previous code
+  europe();
+  pop();
 
   strokeWeight(2);
   stroke(255, 100);
-  fill(0, 0)
+  fill(0, 0);
 
-  for (let i = 0; i < 6; i++) {                                // Thin circles going from the center
+  for (let i = 0; i < 6; i++) { // Thin circles going from the center
     circle(0, 0, (2000 - ((2000 / 6) * i)));
   }
 
-  let cDistance = (1000 - ((1000 / 6)));                       // Prevents the lines from going past the circles
+  let cDistance = (1000 - ((1000 / 6))); // Prevents the lines from going past the circles
 
-  for (let i = 0; i < 9; i++) {                                // Thin straight lines going across the radar
+  for (let i = 0; i < 9; i++) { // Thin straight lines going across the radar
     line(0, cDistance, 0, -cDistance);
     line(-cDistance, 0, cDistance, 0);
-    rotate(20)
+    rotate(20);
   }
 
 }
@@ -181,7 +179,7 @@ function radarBG(x, y) {
 
 function europe() {
   fill(0, 100);
-  scale(0.7)                                                   // Scales the map down and puts it into the center
+  scale(0.7) // Scales the map down and puts it into the center
   translate(-1000, -1000);
   beginShape();
   vertex(-371.35, 1413.55);
